@@ -1,5 +1,40 @@
-<h1>{{.Title}}</h1>
+<!DOCTYPE html>
+<html>
+	<head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>{{.Title}}</title>
 
-<p>[<a href="/edit/{{.Title}}">edit</a>]</p>
+  		<!-- Latest compiled and minified CSS from BS-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="/public/css/sticky-footer.css">
+		
 
-<div>{{printf "%s" .Body}}</div>
+	</head>
+
+  <body>
+  	<div class="container">
+
+    	<div class="page-header">
+        	<h1>{{.Title}}</h1>
+      </div>
+
+      <div class="row">
+      <div class="col-md-6">
+        <p>[<a href="/edit/{{.Title}}">edit {{.Title}}</a>]</p>
+        <div>{{printf "%s" .Body}}</div>
+		  </div>
+      <div class="col-md-6">
+        <img src="/public/img/qr-{{.Title}}.png">
+		  </div>
+    </div>
+
+    <footer class="footer">
+      	<div class="container">
+        	<p class="text-center">This site was made by @anna_livia</p>
+      	</div>
+    </footer>
+   
+
+  </body>
+
+</html>

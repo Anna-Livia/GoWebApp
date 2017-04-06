@@ -6,9 +6,21 @@ import (
 	"net/http"
 	"errors"
 	"regexp"
+	"github.com/skip2/go-qrcode"
+	"log"
+	"fmt"
 )
 var templates = template.Must(template.ParseFiles("temp/edit.html", "temp/view.html"))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
+
+func GenerateQRcode(phrase string) {
+	
+	err := qrcode.WriteFile(phrase, qrcode.Medium, 256, "public/img/qr-"+phrase+".png")
+	
+	if err!= nil {
+		log.Fatal(err)
+	}
+}
 
 func getTitle(w http.ResponseWriter, r *http.Request) (string, error) {
     m := validPath.FindStringSubmatch(r.URL.Path)
@@ -41,8 +53,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
     err := templates.ExecuteTemplate(w, tmpl+".html", p)
     if err != nil {
     	http.Error(w, err.Error(), http.StatusInternalServerError)
-    }
-    
+    }   
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
@@ -72,7 +83,13 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
+    fmt.Printf(title)
+    GenerateQRcode(title)
+    fmt.Printf("done with:", title)
     http.Redirect(w, r, "/view/"+title, http.StatusFound)
+}
+func frontPageHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
 }
 
 func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
@@ -87,11 +104,11 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 }
 
 
-
 func main() {
     http.HandleFunc("/view/", makeHandler(viewHandler))
     http.HandleFunc("/edit/", makeHandler(editHandler))
     http.HandleFunc("/save/", makeHandler(saveHandler))
-
+    http.HandleFunc("/", frontPageHandler)
+    http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
     http.ListenAndServe(":8080", nil)
 }
