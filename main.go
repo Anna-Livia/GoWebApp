@@ -109,12 +109,12 @@ func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = ":8080"
+		port = "8080"
 	}
     http.HandleFunc("/view/", makeHandler(viewHandler))
     http.HandleFunc("/edit/", makeHandler(editHandler))
     http.HandleFunc("/save/", makeHandler(saveHandler))
     http.HandleFunc("/", frontPageHandler)
     http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
-    http.ListenAndServe(port, nil)
+    http.ListenAndServe(":"+ port, nil)
 }
