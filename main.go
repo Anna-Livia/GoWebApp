@@ -9,6 +9,7 @@ import (
 	"github.com/skip2/go-qrcode"
 	"log"
 	"fmt"
+	"os"
 )
 var templates = template.Must(template.ParseFiles("temp/edit.html", "temp/view.html"))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
@@ -105,10 +106,15 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 
 
 func main() {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = ":8080"
+	}
     http.HandleFunc("/view/", makeHandler(viewHandler))
     http.HandleFunc("/edit/", makeHandler(editHandler))
     http.HandleFunc("/save/", makeHandler(saveHandler))
     http.HandleFunc("/", frontPageHandler)
     http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
-    http.ListenAndServe(":8080", nil)
+    http.ListenAndServe(port, nil)
 }

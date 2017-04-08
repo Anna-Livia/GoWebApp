@@ -1,0 +1,22 @@
+{
+	"ImportPath": "github.com/Anna-Livia/GoWebApp",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/skip2/go-qrcode",
+			"Rev": "0bb60b5a716144fa55da373bab578cca49a537d7"
+		},
+		{
+			"ImportPath": "github.com/skip2/go-qrcode/bitset",
+			"Rev": "0bb60b5a716144fa55da373bab578cca49a537d7"
+		},
+		{
+			"ImportPath": "github.com/skip2/go-qrcode/reedsolomon",
+			"Rev": "0bb60b5a716144fa55da373bab578cca49a537d7"
+		}
+	]
+}
